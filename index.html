@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Text Processor v2.1 - 12 Free Text Tools</title>
-  <meta name="description" content="Free online text processing tool. 12 AI-powered features: Summarize, improve, shorten, expand, grammar fix, translate, sentiment analysis, and more.">
+  <title>AI Text Processor v2.2 - 16 Free Text Tools</title>
+  <meta name="description" content="Free online text processing tool. 16 AI-powered features: Summarize, improve, shorten, expand, grammar fix, translate, sentiment analysis, and more.">
   <meta name="keywords" content="text summarizer, text improver, grammar checker, tone changer, AI writing tool">
   <meta property="og:title" content="AI Text Processor">
   <meta property="og:description" content="Transform your text with AI-powered tools">
@@ -406,6 +406,18 @@
       </button>
       <button class="operation-btn" data-op="format">
         <span class="icon">📐</span>Clean Format
+      </button>
+      <button class="operation-btn" data-op="uppercase">
+        <span class="icon">🔠</span>UPPERCASE
+      </button>
+      <button class="operation-btn" data-op="lowercase">
+        <span class="icon">🔡</span>lowercase
+      </button>
+      <button class="operation-btn" data-op="dedupe">
+        <span class="icon">🔄</span>Remove Dupes
+      </button>
+      <button class="operation-btn" data-op="wordcount">
+        <span class="icon">📊</span>Word Stats
       </button>
     </div>
 
@@ -874,6 +886,67 @@
       return result.trim();
     }
 
+    function removeDuplicateWords(text) {
+      // Split into words, keeping case variations as separate
+      const words = text.split(/\s+/);
+      const seen = new Set();
+      const unique = [];
+
+      for (const word of words) {
+        const lower = word.toLowerCase();
+        if (!seen.has(lower)) {
+          seen.add(lower);
+          unique.push(word);
+        }
+      }
+
+      return unique.join(' ');
+    }
+
+    function getDetailedWordStats(text) {
+      const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+      const chars = text.length;
+      const charsNoSpaces = text.replace(/\s/g, '').length;
+      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+      const paragraphs = text.split(/\n\n+/).filter(p => p.trim().length > 0).length;
+
+      // Character breakdown
+      const letters = (text.match(/[a-zA-Z]/g) || []).length;
+      const numbers = (text.match(/[0-9]/g) || []).length;
+      const spaces = (text.match(/ /g) || []).length;
+
+      // Average word length
+      const avgWordLen = words.length > 0
+        ? (charsNoSpaces / words.length).toFixed(1)
+        : 0;
+
+      // Longest/shortest words
+      let longest = '';
+      let shortest = words[0] || '';
+      for (const w of words) {
+        if (w.length > longest.length) longest = w;
+        if (w.length < shortest.length && w.length > 0) shortest = w;
+      }
+
+      return `📊 Detailed Word Statistics
+
+━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 Word Count: ${words.length}
+📏 Character Count: ${chars}
+  • Letters: ${letters}
+  • Numbers: ${numbers}
+  • Spaces: ${spaces}
+  • No Spaces: ${charsNoSpaces}
+
+📖 Sentence Count: ${sentences}
+📋 Paragraph Count: ${paragraphs}
+
+📐 Average Word Length: ${avgWordLen} characters
+
+🔤 Longest Word: "${longest}" (${longest.length} chars)
+🔤 Shortest Word: "${shortest}" (${shortest.length} chars)`;
+    }
+
     function processText() {
       const text = document.getElementById('inputText').value.trim();
       if (!text) {
@@ -929,6 +1002,18 @@
             break;
           case 'format':
             result = cleanFormat(text);
+            break;
+          case 'uppercase':
+            result = text.toUpperCase();
+            break;
+          case 'lowercase':
+            result = text.toLowerCase();
+            break;
+          case 'dedupe':
+            result = removeDuplicateWords(text);
+            break;
+          case 'wordcount':
+            result = getDetailedWordStats(text);
             break;
           default:
             result = text;
