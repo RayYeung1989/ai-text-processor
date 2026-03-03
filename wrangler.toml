@@ -1,0 +1,15 @@
+name = "ai-text-processor"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[vars]
+ENVIRONMENT = "production"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ai-text-processor"
+database_id = "your-database-id"
+
+[[kv_namespaces]]
+binding = "URL_STORE"
+id = "your-kv-id"
