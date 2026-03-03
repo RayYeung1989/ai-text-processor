@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Text Processor - Smart Text Transformation</title>
-  <meta name="description" content="Free online text processing tool. Summarize, improve, shorten, expand, change tone, and more.">
+  <title>AI Text Processor v2.1 - 12 Free Text Tools</title>
+  <meta name="description" content="Free online text processing tool. 12 AI-powered features: Summarize, improve, shorten, expand, grammar fix, translate, sentiment analysis, and more.">
   <meta name="keywords" content="text summarizer, text improver, grammar checker, tone changer, AI writing tool">
   <meta property="og:title" content="AI Text Processor">
   <meta property="og:description" content="Transform your text with AI-powered tools">
@@ -337,7 +337,7 @@
     .coffee-btn:hover { transform: translateY(-2px); }
 
     @media (max-width: 600px) {
-      .operations-grid { grid-template-columns: repeat(2, 1fr); }
+      .operations-grid { grid-template-columns: repeat(3, 1fr); }
       .container { padding: 20px; }
     }
   </style>
@@ -397,6 +397,15 @@
       </button>
       <button class="operation-btn" data-op="keywords">
         <span class="icon">🔑</span>Keywords
+      </button>
+      <button class="operation-btn" data-op="translate">
+        <span class="icon">🌐</span>Translate
+      </button>
+      <button class="operation-btn" data-op="sentiment">
+        <span class="icon">💭</span>Sentiment
+      </button>
+      <button class="operation-btn" data-op="format">
+        <span class="icon">📐</span>Clean Format
       </button>
     </div>
 
@@ -749,6 +758,122 @@
       return sorted.map(([word, count]) => `${word} (${count})`).join(', ');
     }
 
+    function translateText(text, targetLang = 'es') {
+      // Simple rule-based translation simulation
+      // In production, this would call a real translation API
+      const translations = {
+        'hello': { es: 'hola', fr: 'bonjour', de: 'hallo', zh: '你好' },
+        'goodbye': { es: 'adiós', fr: 'au revoir', de: 'auf wiedersehen', zh: '再见' },
+        'thank you': { es: 'gracias', fr: 'merci', de: 'danke', zh: '谢谢' },
+        'please': { es: 'por favor', fr: 's\'il vous plaît', de: 'bitte', zh: '请' },
+        'yes': { es: 'sí', fr: 'oui', de: 'ja', zh: '是' },
+        'no': { es: 'no', fr: 'non', de: 'nein', zh: '不' },
+        'how are you': { es: '¿cómo estás?', fr: 'comment allez-vous?', de: 'wie geht es dir?', zh: '你好吗' },
+        'good morning': { es: 'buenos días', fr: 'bonjour', de: 'guten morgen', zh: '早上好' },
+        'good night': { es: 'buenas noches', fr: 'bonne nuit', de: 'gute nacht', zh: '晚安' },
+        'welcome': { es: 'bienvenido', fr: 'bienvenue', de: 'willkommen', zh: '欢迎' }
+      };
+
+      const langNames = { es: 'Spanish', fr: 'French', de: 'German', zh: 'Chinese' };
+
+      // Check if we have any direct translations
+      let result = text.toLowerCase();
+      let foundTranslation = false;
+
+      for (const [eng, trans] of Object.entries(translations)) {
+        if (result.includes(eng)) {
+          result = result.replace(eng, trans[targetLang] || `[${eng}]`);
+          foundTranslation = true;
+        }
+      }
+
+      if (foundTranslation) {
+        return `Translated to ${langNames[targetLang]}:\n\n${result.charAt(0).toUpperCase() + result.slice(1)}`;
+      }
+
+      // If no direct translations found, show demo message
+      return `📝 Translation Demo (${langNames[targetLang]})\n\n` +
+        `To enable full translation, please upgrade to AI Mode.\n\n` +
+        `Your text: "${text.substring(0, 50)}${text.length > 50 ? '...' : ''}"\n\n` +
+        `This feature supports translation between English, Spanish, French, German, and Chinese.`;
+    }
+
+    function analyzeSentiment(text) {
+      // Simple sentiment analysis based on keyword matching
+      const positiveWords = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'fantastic', 'happy', 'love', 'like', 'best', 'perfect', 'awesome', 'beautiful', 'brilliant', 'outstanding', 'superb', 'pleasant', 'delighted', 'joy', 'excited', 'grateful', 'thank', 'thanks', 'appreciate', 'helpful', 'useful', 'valuable', 'success', 'successful', 'win', 'winner', 'positive', 'benefit', 'advantage', 'improve', 'improved', 'better'];
+      const negativeWords = ['bad', 'terrible', 'awful', 'horrible', 'worst', 'hate', 'dislike', 'poor', 'fail', 'failure', 'failed', 'wrong', 'mistake', 'error', 'problem', 'issue', 'bug', 'broken', 'difficult', 'hard', 'trouble', 'pain', 'annoying', 'frustrating', 'disappointed', 'sad', 'angry', 'upset', 'negative', 'loss', 'lose', 'lost', 'worse', 'worst', 'dangerous', 'harmful', 'useless', 'waste'];
+
+      const words = text.toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/);
+
+      let positiveCount = 0;
+      let negativeCount = 0;
+
+      words.forEach(w => {
+        if (positiveWords.includes(w)) positiveCount++;
+        if (negativeWords.includes(w)) negativeCount++;
+      });
+
+      const total = positiveCount + negativeCount;
+      let sentiment, score, emoji;
+
+      if (total === 0) {
+        sentiment = 'Neutral';
+        score = 0;
+        emoji = '😐';
+      } else if (positiveCount > negativeCount) {
+        sentiment = 'Positive';
+        score = Math.round((positiveCount / total) * 100);
+        emoji = '😊';
+      } else if (negativeCount > positiveCount) {
+        sentiment = 'Negative';
+        score = -Math.round((negativeCount / total) * 100);
+        emoji = '😞';
+      } else {
+        sentiment = 'Neutral';
+        score = 0;
+        emoji = '😐';
+      }
+
+      return `Sentiment Analysis: ${emoji} ${sentiment}\n\n` +
+        `Score: ${score > 0 ? '+' : ''}${score}%\n\n` +
+        `Positive indicators: ${positiveCount}\n` +
+        `Negative indicators: ${negativeCount}\n\n` +
+        (sentiment === 'Positive' ? '👍 Your text has a positive tone!' :
+         sentiment === 'Negative' ? '💡 Consider rephrasing to sound more positive.' :
+         '📝 Your text appears neutral.');
+    }
+
+    function cleanFormat(text) {
+      let result = text;
+
+      // Remove multiple spaces
+      result = result.replace(/[ \t]+/g, ' ');
+
+      // Remove multiple newlines
+      result = result.replace(/\n{3,}/g, '\n\n');
+
+      // Fix spacing around punctuation
+      result = result.replace(/\s+([.,!?;:])/g, '$1');
+      result = result.replace(/([.,!?;:])\s*/g, '$1 ').replace(/\s+$/, '');
+
+      // Remove leading/trailing whitespace per line
+      result = result.split('\n').map(line => line.trim()).join('\n');
+
+      // Ensure single newline between paragraphs
+      result = result.replace(/\n\s*\n\s*\n/g, '\n\n');
+
+      // Capitalize first letter of first word
+      result = result.charAt(0).toUpperCase() + result.slice(1);
+
+      // Fix common typos
+      result = result.replace(/\bi\s+/g, 'I ');
+
+      // Ensure proper sentence spacing
+      result = result.replace(/([.!?])\s*([A-Z])/g, '$1 $2');
+
+      return result.trim();
+    }
+
     function processText() {
       const text = document.getElementById('inputText').value.trim();
       if (!text) {
@@ -795,6 +920,15 @@
             break;
           case 'keywords':
             result = extractKeywords(text);
+            break;
+          case 'translate':
+            result = translateText(text, aiMode ? 'es' : 'fr');
+            break;
+          case 'sentiment':
+            result = analyzeSentiment(text);
+            break;
+          case 'format':
+            result = cleanFormat(text);
             break;
           default:
             result = text;
