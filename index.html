@@ -3,87 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Text Processor - Summarize, Improve, Shorten & Expand Text</title>
-  <meta name="description" content="Free online text processing tool. Summarize long articles, improve writing, shorten or expand text instantly.">
-  <meta name="keywords" content="text summarizer, text improver, text shortener, text expander, AI writing tool">
+  <title>AI Text Processor - Smart Text Transformation</title>
+  <meta name="description" content="Free online text processing tool. Summarize, improve, shorten, expand, change tone, and more.">
+  <meta name="keywords" content="text summarizer, text improver, grammar checker, tone changer, AI writing tool">
   <meta property="og:title" content="AI Text Processor">
-  <meta property="og:description" content="Free online text processing tool">
+  <meta property="og:description" content="Transform your text with AI-powered tools">
   <meta property="og:type" content="website">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✍️</text></svg>">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       padding: 20px;
+      color: #333;
     }
     .container {
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-      padding: 40px;
-      max-width: 600px;
-      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+      padding: 32px;
+      max-width: 720px;
+      margin: 0 auto;
     }
     h1 {
-      color: #333;
-      margin-bottom: 8px;
-      font-size: 28px;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+      font-size: 26px;
+      font-weight: 700;
     }
     .subtitle {
       color: #666;
       margin-bottom: 24px;
       font-size: 14px;
     }
-    .input-group { margin-bottom: 20px; }
-    label {
-      display: block;
+    .input-group { margin-bottom: 16px; }
+    .input-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 8px;
-      color: #444;
-      font-weight: 500;
     }
+    label {
+      color: #444;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .char-count {
+      font-size: 12px;
+      color: #888;
+    }
+    .char-count.warning { color: #e74c3c; }
     textarea {
       width: 100%;
-      height: 150px;
-      padding: 12px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 14px;
+      height: 140px;
+      padding: 14px;
+      border: 2px solid #e8e8e8;
+      border-radius: 12px;
+      font-size: 15px;
       resize: vertical;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+      line-height: 1.5;
     }
     textarea:focus {
       outline: none;
       border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
     }
-    .operations {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+    .ai-mode-toggle {
+      display: flex;
+      align-items: center;
       gap: 12px;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, #f8f9ff 0%, #eef0ff 100%);
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    .ai-mode-toggle label {
+      flex: 1;
+      color: #1a1a2e;
+    }
+    .toggle-switch {
+      position: relative;
+      width: 52px;
+      height: 28px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #ccc;
+      border-radius: 28px;
+      transition: 0.3s;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .toggle-switch input:checked + .toggle-slider {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(24px);
+    }
+    .ai-badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      border-radius: 20px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .operations-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
       margin-bottom: 20px;
     }
     .operation-btn {
-      padding: 12px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
+      padding: 12px 8px;
+      border: 2px solid #e8e8e8;
+      border-radius: 10px;
       background: white;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       transition: all 0.2s;
+      color: #555;
     }
     .operation-btn:hover {
       border-color: #667eea;
       background: #f5f3ff;
+      transform: translateY(-1px);
     }
     .operation-btn.active {
       border-color: #667eea;
       background: #667eea;
       color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    .operation-btn .icon {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 4px;
     }
     .submit-btn {
       width: 100%;
@@ -91,129 +171,302 @@
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
+      border-radius: 12px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
     .submit-btn:hover {
       transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
     }
-    .result {
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+    .result-section {
       margin-top: 24px;
-      padding: 16px;
-      background: #f5f3ff;
-      border-radius: 8px;
       display: none;
     }
-    .result.show { display: block; }
-    .result h3 {
+    .result-section.show { display: block; }
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .result-header h3 {
       color: #667eea;
       font-size: 14px;
-      margin-bottom: 8px;
+      font-weight: 600;
     }
-    .result p {
+    .result-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .result-actions button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .copy-btn {
+      background: #e8e8e8;
+      color: #555;
+    }
+    .copy-btn:hover { background: #ddd; }
+    .copy-btn.copied {
+      background: #10b981;
+      color: white;
+    }
+    .new-btn {
+      background: #667eea;
+      color: white;
+    }
+    .new-btn:hover { background: #5a6fd6; }
+    .result-box {
+      padding: 16px;
+      background: #f8f9ff;
+      border-radius: 12px;
+      border: 1px solid #e8e8ff;
+    }
+    .result-box p {
       color: #333;
-      line-height: 1.6;
+      line-height: 1.7;
       white-space: pre-wrap;
+      word-wrap: break-word;
     }
+    .stats-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: #888;
+    }
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat-change {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .stat-change.positive { background: #d1fae5; color: #059669; }
+    .stat-change.negative { background: #fee2e2; color: #dc2626; }
     .loading {
       text-align: center;
+      padding: 40px;
       color: #666;
       display: none;
     }
     .loading.show { display: block; }
-    .pricing {
-      margin-top: 30px;
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #e8e8e8;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .ai-mode-banner {
+      display: none;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #f59e0b;
+    }
+    .ai-mode-banner.show { display: flex; align-items: center; gap: 12px; }
+    .ai-mode-banner .icon { font-size: 20px; }
+    .ai-mode-banner p {
+      font-size: 13px;
+      color: #92400e;
+      flex: 1;
+    }
+    .ai-mode-banner .upgrade-btn {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .ai-mode-banner .upgrade-btn:hover { transform: scale(1.05); }
+    .footer {
+      margin-top: 28px;
       padding-top: 20px;
       border-top: 1px solid #eee;
-      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .pricing p {
-      color: #666;
+    .stats {
       font-size: 13px;
+      color: #888;
     }
-    .pricing strong {
+    .stats span {
       color: #667eea;
+      font-weight: 600;
     }
-    .kofi {
-      margin-top: 20px;
-      text-align: center;
-    }
-    .kofi-btn {
+    .coffee-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
+      gap: 6px;
+      padding: 8px 14px;
       background: #13C3FF;
       color: white;
       text-decoration: none;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 13px;
       transition: transform 0.2s;
     }
-    .kofi-btn:hover {
-      transform: translateY(-2px);
-    }
-    .stats {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f0f0f0;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 13px;
-      color: #666;
-    }
-    .stats span {
-      color: #667eea;
-      font-weight: 600;
+    .coffee-btn:hover { transform: translateY(-2px); }
+
+    @media (max-width: 600px) {
+      .operations-grid { grid-template-columns: repeat(2, 1fr); }
+      .container { padding: 20px; }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Text Transformer</h1>
-    <p class="subtitle">Transform your text with powerful operations</p>
+    <p class="subtitle">Smart text transformation with AI-powered features</p>
+
+    <div class="ai-mode-toggle">
+      <label>AI Mode (Beta)</label>
+      <div class="toggle-switch">
+        <input type="checkbox" id="aiModeToggle">
+        <span class="toggle-slider"></span>
+      </div>
+      <span class="ai-badge">Pro</span>
+    </div>
+
+    <div class="ai-mode-banner" id="aiBanner">
+      <span class="icon">🚀</span>
+      <p>Unlock advanced AI features with higher quality output</p>
+      <button class="upgrade-btn" onclick="alert('AI Mode coming soon! Sign up for early access.')">Upgrade</button>
+    </div>
 
     <div class="input-group">
-      <label>Enter your text</label>
+      <div class="input-header">
+        <label>Enter your text</label>
+        <span class="char-count" id="charCount">0 characters · 0 words</span>
+      </div>
       <textarea id="inputText" placeholder="Paste or type your text here..."></textarea>
     </div>
 
-    <div class="operations">
-      <button class="operation-btn active" data-op="summarize">Summarize</button>
-      <button class="operation-btn" data-op="improve">Improve</button>
-      <button class="operation-btn" data-op="shorten">Shorten</button>
-      <button class="operation-btn" data-op="expand">Expand</button>
+    <div class="operations-grid">
+      <button class="operation-btn active" data-op="summarize">
+        <span class="icon">📝</span>Summarize
+      </button>
+      <button class="operation-btn" data-op="improve">
+        <span class="icon">✨</span>Improve
+      </button>
+      <button class="operation-btn" data-op="shorten">
+        <span class="icon">✂️</span>Shorten
+      </button>
+      <button class="operation-btn" data-op="expand">
+        <span class="icon">📖</span>Expand
+      </button>
+      <button class="operation-btn" data-op="grammar">
+        <span class="icon">✅</span>Grammar Fix
+      </button>
+      <button class="operation-btn" data-op="tone">
+        <span class="icon">🎭</span>Change Tone
+      </button>
+      <button class="operation-btn" data-op="bullets">
+        <span class="icon">•</span>To Bullets
+      </button>
+      <button class="operation-btn" data-op="headline">
+        <span class="icon">📰</span>Headline
+      </button>
+      <button class="operation-btn" data-op="keywords">
+        <span class="icon">🔑</span>Keywords
+      </button>
     </div>
 
-    <button class="submit-btn" onclick="processText()">Process Text</button>
+    <button class="submit-btn" onclick="processText()">
+      <span id="btnText">Transform Text</span>
+    </button>
 
-    <p class="loading" id="loading">Processing...</p>
+    <p class="loading" id="loading">
+      <span class="loading-spinner"></span>
+      <span>Processing your text...</span>
+    </p>
 
-    <div class="result" id="result">
-      <h3>Result:</h3>
-      <p id="resultText"></p>
+    <div class="result-section" id="result">
+      <div class="result-header">
+        <h3>Result</h3>
+        <div class="result-actions">
+          <button class="copy-btn" onclick="copyResult()">Copy</button>
+          <button class="new-btn" onclick="newTransform()">New</button>
+        </div>
+      </div>
+      <div class="result-box">
+        <p id="resultText"></p>
+      </div>
+      <div class="stats-row">
+        <div class="stat-item">
+          <span>Characters:</span>
+          <span id="charStat">0</span>
+        </div>
+        <div class="stat-item">
+          <span>Words:</span>
+          <span id="wordStat">0</span>
+        </div>
+        <div class="stat-item" id="changeStat">
+          <span>Change:</span>
+          <span class="stat-change positive">0%</span>
+        </div>
+      </div>
     </div>
 
-    <div class="pricing">
-      <p><strong>Free</strong> - Unlimited usage</p>
+    <div class="footer">
       <div class="stats">
         Processed: <span id="count">0</span> texts
       </div>
-      <div class="kofi">
-        <a href="https://ko-fi.com/rayyeung" target="_blank" class="kofi-btn">
-          ☕ Buy me a coffee
-        </a>
-      </div>
+      <a href="https://ko-fi.com/rayyeung" target="_blank" class="coffee-btn">
+        ☕ Coffee
+      </a>
     </div>
   </div>
 
   <script>
     let currentOp = 'summarize';
+    let lastInput = '';
+    let lastOutput = '';
 
+    // Character count
+    document.getElementById('inputText').addEventListener('input', function() {
+      const text = this.value;
+      const chars = text.length;
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      const countEl = document.getElementById('charCount');
+      countEl.textContent = `${chars} characters · ${words} words`;
+      countEl.classList.toggle('warning', chars > 5000);
+    });
+
+    // AI Mode toggle
+    document.getElementById('aiModeToggle').addEventListener('change', function() {
+      document.getElementById('aiBanner').classList.toggle('show', this.checked);
+    });
+
+    // Operation buttons
     document.querySelectorAll('.operation-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.operation-btn').forEach(b => b.classList.remove('active'));
@@ -222,67 +475,401 @@
       });
     });
 
-    function shortenText(text) {
-      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-      if (sentences.length <= 2) return text;
-      return sentences.slice(0, 2).join('. ') + '.';
+    // Text processing functions
+    function countWords(text) {
+      return text.trim() ? text.trim().split(/\s+/).length : 0;
     }
 
-    function expandText(text) {
-      const phrases = ['Furthermore, ', 'Additionally, ', 'Moreover, ', 'In addition, ', 'Consequently, '];
-      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-      if (sentences.length > 1) {
-        const newSentences = sentences.map((s, i) => i === 0 ? s.trim() : phrases[(i - 1) % phrases.length] + s.trim());
-        return newSentences.join('. ') + '.';
-      }
-      return text;
+    function getSentenceScore(sentence) {
+      const len = sentence.trim().length;
+      if (len < 10) return 0;
+      // Prefer medium-length sentences (30-100 chars)
+      if (len >= 30 && len <= 100) return 3;
+      if (len >= 20 && len <= 150) return 2;
+      return 1;
     }
 
     function summarizeText(text) {
-      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-      if (sentences.length <= 3) return text;
-      const scored = sentences.map(s => ({ text: s.trim(), score: Math.abs(50 - s.trim().length) }));
-      scored.sort((a, b) => a.score - b.score);
-      return scored.slice(0, 3).map(s => s.text).join('. ') + '.';
+      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
+      if (sentences.length <= 2) return text;
+
+      // Score sentences
+      const scored = sentences.map(s => ({
+        text: s.trim(),
+        score: getSentenceScore(s)
+      }));
+
+      // Take top sentences
+      scored.sort((a, b) => b.score - a.score);
+      const selected = scored.slice(0, Math.min(3, sentences.length));
+
+      // Sort back to original order
+      selected.sort((a, b) => sentences.indexOf(a.text) - sentences.indexOf(b.text));
+
+      return selected.map(s => s.text).join('. ') + (selected.length > 0 ? '.' : '');
     }
 
     function improveText(text) {
       let result = text;
+
+      // Clean up whitespace
       result = result.replace(/\s+/g, ' ');
+
+      // Fix common issues
       result = result.replace(/,\s*,/g, ',');
       result = result.replace(/\.\s*\./g, '.');
+      result = result.replace(/\s+([.,!?])/g, '$1');
+      result = result.replace(/([.,!?])\s*/g, '$1 ').replace(/\s+$/, '');
+
+      // Capitalize first letter
       result = result.charAt(0).toUpperCase() + result.slice(1);
+
+      // Ensure proper spacing after punctuation
+      result = result.replace(/([.!?])\s*([A-Z])/g, '$1 $2');
+
       return result.trim();
+    }
+
+    function shortenText(text) {
+      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 5);
+      if (sentences.length <= 1) return text;
+
+      // Keep first and last, or just first 2-3 most important
+      const scored = sentences.map(s => ({
+        text: s.trim(),
+        score: getSentenceScore(s)
+      }));
+
+      scored.sort((a, b) => b.score - a.score);
+      const selected = scored.slice(0, Math.min(2, sentences.length));
+      selected.sort((a, b) => sentences.indexOf(a.text) - sentences.indexOf(b.text));
+
+      return selected.map(s => s.text).join('. ') + (selected.length > 0 ? '.' : '');
+    }
+
+    function expandText(text) {
+      const connectors = [
+        'Furthermore, ', 'Additionally, ', 'Moreover, ', 'In addition, ',
+        'Consequently, ', 'Therefore, ', 'As a result, ', 'In fact, ',
+        'Specifically, ', 'Importantly, ', 'Notably, ', 'Indeed, '
+      ];
+
+      const emphasis = [
+        'It is important to note that ',
+        'It should be emphasized that ',
+        'It is worth mentioning that ',
+        'The key point is that '
+      ];
+
+      let sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+
+      if (sentences.length === 0) return text;
+      if (sentences.length === 1) {
+        // Expand single sentence by adding context
+        const s = sentences[0].trim();
+        const connector = connectors[Math.floor(Math.random() * connectors.length)];
+        return s + '. ' + connector + s.toLowerCase() + '.';
+      }
+
+      // Expand each sentence with connectors
+      const expanded = sentences.map((s, i) => {
+        const trimmed = s.trim();
+        if (i === 0) return trimmed;
+        if (i === sentences.length - 1 && Math.random() > 0.5) {
+          return emphasis[i % emphasis.length] + trimmed.toLowerCase();
+        }
+        return connectors[(i - 1) % connectors.length] + trimmed.toLowerCase();
+      });
+
+      return expanded.join('. ') + '.';
+    }
+
+    function grammarFix(text) {
+      let result = text;
+
+      // Common grammar fixes
+      const fixes = [
+        { pattern: /\bi\s+/g, match: 'I ', desc: 'capitalize I' },
+        { pattern: /\bdon\s+t\b/gi, match: "don't", desc: "apostrophe in don't" },
+        { pattern: /\bcan\s+t\b/gi, match: "can't", desc: "apostrophe in can't" },
+        { pattern: /\bwont\b/gi, match: "won't", desc: "apostrophe in won't" },
+        { pattern: /\bits\s+a\b/gi, match: "it's a", desc: "it's vs its" },
+        { pattern: /\bcould\s+of\b/gi, match: "could have", desc: "could have" },
+        { pattern: /\bwould\s+of\b/gi, match: "would have", desc: "would have" },
+        { pattern: /\bshould\s+of\b/gi, match: "should have", desc: "should have" },
+        { pattern: /\balot\b/gi, match: "a lot", desc: "alot -> a lot" },
+        { pattern: /\bteh\b/gi, match: "the", desc: "teh -> the" },
+        { pattern: /\brecieve\b/gi, match: "receive", desc: "recieve -> receive" },
+        { pattern: /\bdefinately\b/gi, match: "definitely", desc: "definately -> definitely" },
+        { pattern: /\boccured\b/gi, match: "occurred", desc: "occured -> occurred" },
+        { pattern: /\bseperate\b/gi, match: "separate", desc: "seperate -> separate" },
+        { pattern: /\buntill\b/gi, match: "until", desc: "untill -> until" },
+        { pattern: /\bbegining\b/gi, match: "beginning", desc: "begining -> beginning" },
+      ];
+
+      fixes.forEach(fix => {
+        result = result.replace(fix.pattern, fix.match);
+      });
+
+      // Clean up spacing
+      result = result.replace(/\s+/g, ' ');
+      result = result.replace(/\s+([.,!?])/g, '$1');
+
+      // Capitalize first letter
+      result = result.charAt(0).toUpperCase() + result.slice(1);
+
+      return result.trim();
+    }
+
+    function changeTone(text, targetTone = 'professional') {
+      const tones = {
+        professional: {
+          formal: ['consider', 'furthermore', 'therefore', 'accordingly', 'nevertheless'],
+          informal: ['think', 'also', 'so', 'as a result', 'but']
+        },
+        casual: {
+          formal: ['awesome', 'super', 'pretty', 'really', 'kind of'],
+          informal: ['significant', 'consequently', 'regarding', 'nevertheless', 'approximately']
+        }
+      };
+
+      let result = text;
+
+      if (targetTone === 'professional') {
+        // Make more formal
+        result = result.replace(/\bvery\b/gi, 'significantly');
+        result = result.replace(/\breally\b/gi, 'particularly');
+        result = result.replace(/\bso\b/gi, 'therefore');
+        result = result.replace(/\bbut\b/gi, 'however');
+        result = result.replace(/\balso\b/gi, 'additionally');
+        result = result.replace(/\bgot\b/gi, 'obtained');
+        result = result.replace(/\bwanna\b/gi, 'want to');
+        result = result.replace(/\bgonna\b/gi, 'going to');
+      } else if (targetTone === 'friendly') {
+        // Make friendlier
+        result = result.replace(/\bhowever\b/gi, 'but');
+        result = result.replace(/\btherefore\b/gi, 'so');
+        result = result.replace(/\bfurthermore\b/gi, 'also');
+        result = result.replace(/\badditionally\b/gi, 'plus');
+        result = result.replace(/\bconcerning\b/gi, 'about');
+        result = result.replace(/\bregardarding\b/gi, 'about');
+      }
+
+      return result;
+    }
+
+    function toBullets(text) {
+      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
+      if (sentences.length <= 1) {
+        // Try splitting by commas or semicolons
+        const parts = text.split(/[,;]/).filter(s => s.trim().length > 5);
+        if (parts.length > 1) {
+          return parts.map(s => '• ' + s.trim()).join('\n');
+        }
+        return '• ' + text.trim();
+      }
+
+      return sentences.map(s => '• ' + s.trim()).join('\n');
+    }
+
+    function generateHeadline(text) {
+      // Extract key phrases
+      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
+
+      if (sentences.length === 0) return "Your Headline Here";
+
+      // Find important words (longer words, capitalized words)
+      const words = text.split(/\s+/).filter(w => w.length > 4);
+
+      // Simple headline generation
+      const starters = [
+        'How to',
+        'Why',
+        'The Ultimate Guide to',
+        'What You Need to Know About',
+        '5 Key Insights on',
+        'Mastering',
+        'The Secret to',
+        'Breaking Down'
+      ];
+
+      const starter = starters[Math.floor(Math.random() * starters.length)];
+
+      // Extract first significant phrase
+      let keyPhrase = '';
+      const significantWords = words.filter(w =>
+        w.length > 5 &&
+        !['about', 'after', 'before', 'being', 'could', 'would', 'should'].includes(w.toLowerCase())
+      );
+
+      if (significantWords.length > 0) {
+        keyPhrase = significantWords.slice(0, 3).join(' ').replace(/[^a-zA-Z\s]/g, '');
+      }
+
+      if (keyPhrase.length > 3) {
+        return `${starter} ${keyPhrase}`;
+      }
+
+      // Fallback
+      const firstWords = text.split(/\s+/).slice(0, 4).join(' ');
+      return `${starter} ${firstWords}`;
+    }
+
+    function extractKeywords(text) {
+      // Common stop words to remove
+      const stopWords = new Set([
+        'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
+        'of', 'with', 'by', 'from', 'as', 'is', 'was', 'are', 'were', 'been',
+        'be', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would',
+        'could', 'should', 'may', 'might', 'must', 'shall', 'can', 'need',
+        'it', 'its', 'this', 'that', 'these', 'those', 'i', 'you', 'he',
+        'she', 'we', 'they', 'what', 'which', 'who', 'whom', 'when', 'where',
+        'why', 'how', 'all', 'each', 'every', 'both', 'few', 'more', 'most',
+        'other', 'some', 'such', 'no', 'not', 'only', 'same', 'so', 'than',
+        'too', 'very', 'just', 'also', 'now', 'here', 'there', 'then', 'once'
+      ]);
+
+      // Extract words
+      const words = text.toLowerCase()
+        .replace(/[^a-z\s]/g, '')
+        .split(/\s+/)
+        .filter(w => w.length > 3 && !stopWords.has(w));
+
+      // Count frequency
+      const freq = {};
+      words.forEach(w => {
+        freq[w] = (freq[w] || 0) + 1;
+      });
+
+      // Sort by frequency and take top keywords
+      const sorted = Object.entries(freq)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10);
+
+      return sorted.map(([word, count]) => `${word} (${count})`).join(', ');
     }
 
     function processText() {
       const text = document.getElementById('inputText').value.trim();
-      if (!text) { alert('Please enter some text'); return; }
+      if (!text) {
+        alert('Please enter some text');
+        return;
+      }
 
+      lastInput = text;
       document.getElementById('loading').classList.add('show');
       document.getElementById('result').classList.remove('show');
+      document.getElementById('btnText').textContent = 'Processing...';
+
+      // Simulate processing time for "AI feel"
+      const delay = 400 + Math.random() * 400;
 
       setTimeout(() => {
         let result;
+        const aiMode = document.getElementById('aiModeToggle').checked;
+
         switch (currentOp) {
-          case 'summarize': result = summarizeText(text); break;
-          case 'improve': result = improveText(text); break;
-          case 'shorten': result = shortenText(text); break;
-          case 'expand': result = expandText(text); break;
-          default: result = text;
+          case 'summarize':
+            result = aiMode ? summarizeText(text).substring(0, 200) : summarizeText(text);
+            break;
+          case 'improve':
+            result = improveText(text);
+            break;
+          case 'shorten':
+            result = shortenText(text);
+            break;
+          case 'expand':
+            result = expandText(text);
+            break;
+          case 'grammar':
+            result = grammarFix(text);
+            break;
+          case 'tone':
+            result = changeTone(text, aiMode ? 'professional' : 'friendly');
+            break;
+          case 'bullets':
+            result = toBullets(text);
+            break;
+          case 'headline':
+            result = generateHeadline(text);
+            break;
+          case 'keywords':
+            result = extractKeywords(text);
+            break;
+          default:
+            result = text;
         }
+
+        lastOutput = result;
+
+        // Update result display
         document.getElementById('resultText').textContent = result;
         document.getElementById('result').classList.add('show');
         document.getElementById('loading').classList.remove('show');
+        document.getElementById('btnText').textContent = 'Transform Text';
+
+        // Update stats
+        const inputChars = text.length;
+        const outputChars = result.length;
+        const inputWords = countWords(text);
+        const outputWords = countWords(result);
+        const changePercent = inputChars > 0
+          ? Math.round(((outputChars - inputChars) / inputChars) * 100)
+          : 0;
+
+        document.getElementById('charStat').textContent = outputChars;
+        document.getElementById('wordStat').textContent = outputWords;
+
+        const changeEl = document.getElementById('changeStat');
+        if (changePercent > 0) {
+          changeEl.innerHTML = `<span>Change:</span><span class="stat-change positive">+${changePercent}%</span>`;
+        } else if (changePercent < 0) {
+          changeEl.innerHTML = `<span>Change:</span><span class="stat-change negative">${changePercent}%</span>`;
+        } else {
+          changeEl.innerHTML = `<span>Change:</span><span>0%</span>`;
+        }
+
         // Update count
         let count = parseInt(localStorage.getItem('textCount') || '0');
         count++;
         localStorage.setItem('textCount', count);
         document.getElementById('count').textContent = count;
-      }, 300);
+
+        // Scroll to result
+        document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, delay);
     }
+
+    function copyResult() {
+      navigator.clipboard.writeText(lastOutput).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    function newTransform() {
+      document.getElementById('inputText').value = lastOutput;
+      document.getElementById('inputText').dispatchEvent(new Event('input'));
+      document.getElementById('result').classList.remove('show');
+      document.getElementById('inputText').focus();
+      document.getElementById('inputText').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     // Load count on page load
     document.getElementById('count').textContent = localStorage.getItem('textCount') || '0';
+
+    // Handle Enter key in textarea (but allow shift+enter)
+    document.getElementById('inputText').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        processText();
+      }
+    });
   </script>
 </body>
 </html>
