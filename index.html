@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Transformer</title>
+  <title>AI Text Processor - Summarize, Improve, Shorten & Expand Text</title>
+  <meta name="description" content="Free online text processing tool. Summarize long articles, improve writing, shorten or expand text instantly.">
+  <meta name="keywords" content="text summarizer, text improver, text shortener, text expander, AI writing tool">
+  <meta property="og:title" content="AI Text Processor">
+  <meta property="og:description" content="Free online text processing tool">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✍️</text></svg>">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -131,6 +137,39 @@
     .pricing strong {
       color: #667eea;
     }
+    .kofi {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .kofi-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #13C3FF;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+    .kofi-btn:hover {
+      transform: translateY(-2px);
+    }
+    .stats {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f0f0f0;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+    }
+    .stats span {
+      color: #667eea;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -161,6 +200,14 @@
 
     <div class="pricing">
       <p><strong>Free</strong> - Unlimited usage</p>
+      <div class="stats">
+        Processed: <span id="count">0</span> texts
+      </div>
+      <div class="kofi">
+        <a href="https://ko-fi.com/rayyeung" target="_blank" class="kofi-btn">
+          ☕ Buy me a coffee
+        </a>
+      </div>
     </div>
   </div>
 
@@ -227,8 +274,15 @@
         document.getElementById('resultText').textContent = result;
         document.getElementById('result').classList.add('show');
         document.getElementById('loading').classList.remove('show');
+        // Update count
+        let count = parseInt(localStorage.getItem('textCount') || '0');
+        count++;
+        localStorage.setItem('textCount', count);
+        document.getElementById('count').textContent = count;
       }, 300);
     }
+    // Load count on page load
+    document.getElementById('count').textContent = localStorage.getItem('textCount') || '0';
   </script>
 </body>
 </html>
