@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Text Processor</title>
+  <title>Text Transformer</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -135,8 +135,8 @@
 </head>
 <body>
   <div class="container">
-    <h1>AI Text Processor</h1>
-    <p class="subtitle">Transform your text with AI-powered operations</p>
+    <h1>Text Transformer</h1>
+    <p class="subtitle">Transform your text with powerful operations</p>
 
     <div class="input-group">
       <label>Enter your text</label>
@@ -160,7 +160,7 @@
     </div>
 
     <div class="pricing">
-      <p><strong>Free</strong> - 10 texts/day | <strong>$9/mo</strong> - Unlimited</p>
+      <p><strong>Free</strong> - Unlimited usage</p>
     </div>
   </div>
 
@@ -182,20 +182,10 @@
     }
 
     function expandText(text) {
-      const phrases = [
-        'Furthermore, ',
-        'Additionally, ',
-        'Moreover, ',
-        'In addition, ',
-        'Consequently, '
-      ];
+      const phrases = ['Furthermore, ', 'Additionally, ', 'Moreover, ', 'In addition, ', 'Consequently, '];
       const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-
       if (sentences.length > 1) {
-        const newSentences = sentences.map((s, i) => {
-          if (i === 0) return s.trim();
-          return phrases[(i - 1) % phrases.length] + s.trim();
-        });
+        const newSentences = sentences.map((s, i) => i === 0 ? s.trim() : phrases[(i - 1) % phrases.length] + s.trim());
         return newSentences.join('. ') + '.';
       }
       return text;
@@ -204,12 +194,7 @@
     function summarizeText(text) {
       const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
       if (sentences.length <= 3) return text;
-
-      const scored = sentences.map(s => ({
-        text: s.trim(),
-        score: Math.abs(50 - s.trim().length)
-      }));
-
+      const scored = sentences.map(s => ({ text: s.trim(), score: Math.abs(50 - s.trim().length) }));
       scored.sort((a, b) => a.score - b.score);
       return scored.slice(0, 3).map(s => s.text).join('. ') + '.';
     }
@@ -225,38 +210,24 @@
 
     function processText() {
       const text = document.getElementById('inputText').value.trim();
-      if (!text) {
-        alert('Please enter some text');
-        return;
-      }
+      if (!text) { alert('Please enter some text'); return; }
 
       document.getElementById('loading').classList.add('show');
       document.getElementById('result').classList.remove('show');
 
-      // Simulate processing delay
       setTimeout(() => {
         let result;
         switch (currentOp) {
-          case 'summarize':
-            result = summarizeText(text);
-            break;
-          case 'improve':
-            result = improveText(text);
-            break;
-          case 'shorten':
-            result = shortenText(text);
-            break;
-          case 'expand':
-            result = expandText(text);
-            break;
-          default:
-            result = text;
+          case 'summarize': result = summarizeText(text); break;
+          case 'improve': result = improveText(text); break;
+          case 'shorten': result = shortenText(text); break;
+          case 'expand': result = expandText(text); break;
+          default: result = text;
         }
-
         document.getElementById('resultText').textContent = result;
         document.getElementById('result').classList.add('show');
         document.getElementById('loading').classList.remove('show');
-      }, 500);
+      }, 300);
     }
   </script>
 </body>
