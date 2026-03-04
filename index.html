@@ -312,10 +312,20 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .stats {
       font-size: 13px;
       color: #888;
+    }
+    .support-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .affiliate {
+      color: #ccc;
     }
     .stats span {
       color: #667eea;
@@ -461,9 +471,11 @@
       <div class="stats">
         Processed: <span id="count">0</span> texts
       </div>
-      <a href="https://ko-fi.com/rayyeung" target="_blank" class="coffee-btn">
-        ☕ Coffee
-      </a>
+      <div class="support-links">
+        <a href="https://ko-fi.com/rayyeung" target="_blank" class="coffee-btn">☕ Coffee</a>
+        <span class="affiliate">|</span>
+        <a href="https://github.com/sponsors/RayYeung1989" target="_blank" class="coffee-btn">❤️ Sponsor</a>
+      </div>
     </div>
   </div>
 
